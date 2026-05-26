@@ -2,22 +2,37 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 
+// Map navigation names to corresponding in-page IDs
 const NAV_LINKS = [
-  { label: 'Home', path: '#home' },
-  { label: 'Events', path: '#events' },
-  { label: 'Speakers', path: '#speakers' },
-  { label: 'About', path: '#about' },
-  { label: 'Media', path: '#home' },
-  { label: 'Blog', path: '#home' },
+  { label: 'Home', path: '#home', id: 'home' },
+  { label: 'Events', path: '#events', id: 'events' },
+  { label: 'Speakers', path: '#speakers', id: 'speakers' },
+  { label: 'About', path: '#about', id: 'about' },
+  { label: 'Media', path: '#home', id: 'media' },
+  { label: 'Blog', path: '#home', id: 'blog' },
 ]
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
 
+  // Scroll-Spy: Automatically tracks which card is currently in view and highlights its nav link!
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
+      const sections = ['home', 'events', 'speakers', 'about', 'register']
+      const scrollPosition = window.scrollY + 120 // Small offset for early detection
+
+      for (const section of sections) {
+        const el = document.getElementById(section)
+        if (el) {
+          const top = el.offsetTop
+          const height = el.offsetHeight
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section)
+            break
+          }
+        }
+      }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -26,17 +41,15 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Constant Glassmorphism Header - Added 'relative' to make it the absolute center reference */}
       <nav
-        className={`sticky top-0 z-50 w-full h-[52px] flex items-center px-6 transition-all duration-200 ${scrolled
-          ? 'bg-[rgba(245,245,247,0.82)] backdrop-blur-[20px] border-b border-black/8'
-          : 'bg-[rgba(245,245,247,0.6)]'
-          }`}
+        className="sticky top-0 z-50 w-full h-[52px] flex items-center px-6 transition-all duration-200 bg-[rgba(245,245,247,0.82)] backdrop-blur-[20px] border-b border-black/8 relative"
       >
-        {/* 3-Column Balanced Layout for perfect screen centering */}
-        <div className="w-full max-w-[1200px] mx-auto flex items-center relative">
+        {/* Inner container handles Left Logo and Right CTA only */}
+        <div className="w-full max-w-[1200px] mx-auto flex items-center justify-between">
 
           {/* Left Column: Logo */}
-          <div className="flex-1 flex justify-start">
+          <div className="flex items-center justify-start z-10">
             <a href="#home" className="flex items-center gap-2 no-underline shrink-0">
               <div className="w-[26px] h-[26px] rounded-[7px] bg-gradient-to-br from-[#5856d6] to-[#34c759] flex items-center justify-center flex-shrink-0">
                 <span className="font-display font-black text-white text-[12px] leading-none">N</span>
@@ -47,34 +60,31 @@ export default function Navbar() {
             </a>
           </div>
 
-          {/* Center Column: Navigation Menu */}
-          <div className="flex-1 hidden md:flex justify-center">
-            <ul className="flex items-center gap-1 list-none m-0 p-0">
-              {NAV_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.path}
-                    className="inline-block text-[12px] font-[500] px-[11px] py-1 rounded-md no-underline transition-all duration-150 text-[#1d1d1f] opacity-70 hover:opacity-100"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Right Column: CTA Button */}
-          <div className="flex-1 hidden md:flex justify-end">
+          <div className="hidden md:flex items-center justify-end z-10">
             <a
               href="#register"
-              className="bg-[#5856d6] text-white text-[12px] font-[500] px-[16px] py-[7px] rounded-[20px] no-underline transition-all duration-200 hover:bg-[#4845c2] inline-block whitespace-nowrap"
+              style={{
+                background: '#5856d6',
+                color: '#fff',
+                fontFamily: 'var(--font-body)',
+                fontSize: '12px',
+                fontWeight: 500,
+                padding: '7px 16px',
+                borderRadius: '20px',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#4845c2')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#5856d6')}
             >
               Join Summit 2026
             </a>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden ml-auto">
+          <div className="md:hidden ml-auto z-10">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-1 rounded-md text-[#1d1d1f] opacity-70 hover:opacity-100 hover:bg-black/6 transition-all duration-150 cursor-pointer border-none bg-none"
@@ -83,6 +93,57 @@ export default function Navbar() {
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
+        </div>
+
+        {/* Center Column: Navigation Menu (Now absolutely centered relative to 100% full screen width!) */}
+        <div
+          className="hidden md:flex items-center z-0"
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <ul className="flex items-center list-none m-0 p-0" style={{ gap: '0px' }}>
+            {NAV_LINKS.map((link) => {
+              const isCurrent = activeSection === link.id
+              return (
+                <li key={link.label}>
+                  <a
+                    href={link.path}
+                    style={{
+                      display: 'inline-block',
+                      color: '#1d1d1f',
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '12px',
+                      fontWeight: isCurrent ? 500 : 400,
+                      opacity: isCurrent ? 1 : 0.7,
+                      padding: '4px 11px',
+                      borderRadius: '6px',
+                      textDecoration: 'none',
+                      transition: 'all 0.15s',
+                      background: 'transparent'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isCurrent) {
+                        e.currentTarget.style.opacity = '1'
+                        e.currentTarget.style.background = 'rgba(0,0,0,0.06)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isCurrent) {
+                        e.currentTarget.style.opacity = '0.7'
+                        e.currentTarget.style.background = 'transparent'
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
         </div>
       </nav>
 
