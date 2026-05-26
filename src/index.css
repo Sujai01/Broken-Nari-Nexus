@@ -423,3 +423,41 @@ body {
   background: rgba(88, 86, 214, 0.2);
   color: var(--color-text-primary);
 }
+
+/* ─────────────────────────────────────────────────────────
+   HERO WORDMARK TYPOGRAPHY (Matches your Markup)
+   ───────────────────────────────────────────────────────── */
+
+.hero-vis {
+  width: 100%;
+  padding: 40px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.summit-wordmark {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: clamp(60px, 10vw, 120px);
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  background: linear-gradient(135deg, #a29dff 0%, #bf94ff 30%, #34c759 70%, #4eb8ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  user-select: none;
+}
+
+.summit-year {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 800;
+  font-size: clamp(80px, 14vw, 180px);
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  color: rgba(255, 255, 255, 0.04);
+  margin-top: -10px;
+  user-select: none;
+}

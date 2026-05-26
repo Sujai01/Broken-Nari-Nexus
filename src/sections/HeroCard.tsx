@@ -59,7 +59,7 @@ export default function HeroCard() {
   return (
     <div
       className="card card-grid-full card-dark relative overflow-hidden"
-      style={{ minHeight: '600px', paddingTop: '60px' }}
+      style={{ minHeight: '720px', paddingTop: '60px' }}
     >
       {/* Background Gradients */}
       <div
@@ -85,52 +85,105 @@ export default function HeroCard() {
         }}
       />
 
-      {/* Floating Chips */}
-      <motion.div
-        className="absolute top-[18%] left-[6%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float"
+      {/* 4 Floating Chips (100% Replicated from your Markup) */}
+      {/* 4 Floating Chips (Z-Indexed for True Overlay & Translucency) */}
+      <div
+        className="chip animate-float"
         style={{
+          position: 'absolute',
+          top: '18%',
+          left: '6%',
           background: 'rgba(88, 86, 214, 0.2)',
           border: '1px solid rgba(88, 86, 214, 0.3)',
           color: 'rgba(162, 157, 255, 0.9)',
+          fontSize: '10px',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          padding: '5px 11px',
+          borderRadius: '20px',
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 20, // Pushes chip on top of heading text
         }}
       >
         🎓 IEEE Affiliated
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="absolute top-[22%] right-[7%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float-slow"
+      <div
+        className="chip animate-float-slow"
         style={{
+          position: 'absolute',
+          top: '22%',
+          right: '7%',
           background: 'rgba(52, 199, 89, 0.15)',
           border: '1px solid rgba(52, 199, 89, 0.25)',
-          color: 'rgba(48, 209, 88, 0.9)',
+          color: 'rgba(48, 209, 88, 0.95)',
+          fontSize: '10px',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          padding: '5px 11px',
+          borderRadius: '20px',
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 20, // Pushes chip on top of heading text
         }}
       >
         📍 Greater Noida
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="absolute bottom-[32%] left-[4%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float"
+      <div
+        className="chip animate-float"
         style={{
+          position: 'absolute',
+          bottom: '32%',
+          left: '4%',
           background: 'rgba(255, 255, 255, 0.06)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           color: 'rgba(255, 255, 255, 0.6)',
+          fontSize: '10px',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          padding: '5px 11px',
+          borderRadius: '20px',
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
           animationDelay: '1.2s',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 20, // Pushes chip on top of heading text
         }}
       >
         ⚡ 500+ Speakers
-      </motion.div>
+      </div>
 
-      <motion.div
-        className="absolute bottom-[28%] right-[5%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float-slow"
+      <div
+        className="chip animate-float-slow"
         style={{
+          position: 'absolute',
+          bottom: '28%',
+          right: '5%',
           background: 'rgba(255, 255, 255, 0.06)',
           border: '1px solid rgba(255, 255, 255, 0.1)',
           color: 'rgba(255, 255, 255, 0.6)',
+          fontSize: '10px',
+          fontWeight: 500,
+          letterSpacing: '0.04em',
+          padding: '5px 11px',
+          borderRadius: '20px',
+          whiteSpace: 'nowrap',
+          pointerEvents: 'none',
           animationDelay: '2s',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 20, // Pushes chip on top of heading text
         }}
       >
         🌍 40+ Countries
-      </motion.div>
+      </div>
 
       {/* Content */}
       <motion.div
@@ -161,8 +214,10 @@ export default function HeroCard() {
             maxWidth: '850px',
           }}
         >
-          Where <span className="text-acc-purple">Research</span><br />
-          meets <span className="text-acc-green">Innovation.</span>
+          Where <span className="gradient-purple-text">Research</span><br />
+          <span className="inline-block whitespace-nowrap">
+            meets <span className="gradient-green-text">Innovation.</span>
+          </span>
         </motion.h1>
 
         {/* Subheading */}
@@ -173,16 +228,20 @@ export default function HeroCard() {
             color: 'rgba(255, 255, 255, 0.65)',
             fontSize: '15px',
             lineHeight: 1.55,
-            maxWidth: '460px',
+            maxWidth: '600px',
           }}
         >
           India's premier academic summit for researchers, technologists, and innovators. September 25–28, Greater Noida.
         </motion.p>
 
-        {/* CTA Links (Thin, elegant underscores) */}
+        {/* CTA Links */}
         <motion.div
           variants={itemVariants}
-          className="flex items-center gap-5 justify-center mt-5 mb-7"
+          className="flex items-center gap-5 justify-center"
+          style={{
+            marginTop: '36px',
+            marginBottom: '40px',
+          }}
         >
           <a
             href="#register"
@@ -198,10 +257,14 @@ export default function HeroCard() {
           </a>
         </motion.div>
 
-        {/* Countdown (Clean layout spacing) */}
+        {/* Countdown */}
         <motion.div
           variants={itemVariants}
-          className="flex gap-[6px] mt-2 mb-11"
+          className="flex gap-[6px]"
+          style={{
+            marginTop: '44px',
+            marginBottom: '40px',
+          }}
         >
           {[
             { label: 'Days', value: countdown.days },
@@ -211,10 +274,13 @@ export default function HeroCard() {
           ].map((item) => (
             <div
               key={item.label}
-              className="flex flex-col items-center min-w-[58px] px-4 py-3 rounded-xl text-center"
+              className="flex flex-col items-center text-center"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 border: '1px solid rgba(255, 255, 255, 0.12)',
+                borderRadius: '12px',
+                padding: '12px 16px',
+                minWidth: '58px',
                 backdropFilter: 'blur(8px)',
               }}
             >
@@ -233,24 +299,9 @@ export default function HeroCard() {
       </motion.div>
 
       {/* Bottom Wordmark */}
-      <div
-        className="absolute bottom-0 left-0 right-0 text-center overflow-hidden pointer-events-none"
-        style={{
-          lineHeight: 0.9,
-          marginTop: '-10px',
-        }}
-      >
-        <span
-          className="font-display font-black select-none"
-          style={{
-            fontSize: 'clamp(80px, 14vw, 180px)',
-            letterSpacing: '-0.06em',
-            color: 'rgba(255, 255, 255, 0.04)',
-            display: 'block',
-          }}
-        >
-          NARI 2026
-        </span>
+      <div className="hero-vis mt-24 w-full flex flex-col items-center relative z-10 pointer-events-none">
+        <div className="summit-wordmark select-none">NARI</div>
+        <div className="summit-year select-none">2026</div>
       </div>
     </div>
   )
