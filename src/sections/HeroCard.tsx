@@ -1,105 +1,81 @@
-import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Play } from 'lucide-react'
 
-// ── Countdown hook ──────────────────────────────────────────────────────────
-function useCountdown(targetISO: string) {
-  const calc = () => {
-    const diff = new Date(targetISO).getTime() - Date.now()
-    if (diff <= 0) return { d: '00', h: '00', m: '00', s: '00', done: true }
-    const d = Math.floor(diff / 86_400_000)
-    const h = Math.floor((diff % 86_400_000) / 3_600_000)
-    const m = Math.floor((diff % 3_600_000) / 60_000)
-    const s = Math.floor((diff % 60_000) / 1_000)
-    const p = (n: number) => String(n).padStart(2, '0')
-    return { d: p(d), h: p(h), m: p(m), s: p(s), done: false }
-  }
-  const [tick, setTick] = useState(calc)
-  useEffect(() => {
-    const id = setInterval(() => setTick(calc()), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return tick
+interface Countdown {
+  days: number
+  hours: number
+  minutes: number
+  seconds: number
 }
 
-// ── Floating chip component ──────────────────────────────────────────────────
-function Chip({
-  children,
-  style,
-  animClass,
-}: {
-  children: React.ReactNode
-  style: React.CSSProperties
-  animClass: string
-}) {
-  return (
-    <div
-      className={`float-chip ${animClass}`}
-      style={style}
-      aria-hidden="true"
-    >
-      {children}
-    </div>
-  )
-}
-
-// ── Countdown box ────────────────────────────────────────────────────────────
-function CdBox({ value, label }: { value: string; label: string }) {
-  return (
-    <div
-      className="flex flex-col items-center min-w-[56px] px-4 py-3 rounded-xl text-center"
-      style={{
-        background: 'rgba(255,255,255,0.08)',
-        border: '1px solid rgba(255,255,255,0.12)',
-        backdropFilter: 'blur(10px)',
-      }}
-    >
-      <span className="font-display font-black text-[22px] text-[#f5f5f7] leading-none tracking-[-0.02em]">
-        {value}
-      </span>
-      <span className="text-[9px] text-white/40 uppercase tracking-[0.07em] mt-[3px]">
-        {label}
-      </span>
-    </div>
-  )
-}
-
-// ── Main export ──────────────────────────────────────────────────────────────
 export default function HeroCard() {
-  const { d, h, m, s } = useCountdown('2026-09-25T09:00:00+05:30')
+  const [countdown, setCountdown] = useState<Countdown>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+
+  useEffect(() => {
+    const calculateCountdown = () => {
+      const targetDate = new Date('2026-09-25T09:00:00+05:30').getTime()
+      const now = new Date().getTime()
+      const difference = targetDate - now
+
+      if (difference > 0) {
+        setCountdown({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        })
+      }
+    }
+
+    calculateCountdown()
+    const interval = setInterval(calculateCountdown, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const containerVariants = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
+    visible: {
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
   }
+
   const itemVariants = {
-    hidden:  { opacity: 0, y: 18 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] } },
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] },
+    },
   }
 
   return (
     <div
-      className="card col-full"
-      style={{ background: '#1d1d1f', minHeight: '620px', paddingTop: '64px' }}
+      className="card card-grid-full card-dark relative overflow-hidden"
+      style={{ minHeight: '600px', paddingTop: '60px' }}
     >
-      {/* Background radial glow */}
+      {/* Background Gradients */}
       <div
-        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
           background: `
-            radial-gradient(ellipse 70% 55% at 50% 0%, rgba(88,86,214,0.18) 0%, transparent 65%),
-            radial-gradient(ellipse 40% 30% at 80% 80%, rgba(52,199,89,0.10) 0%, transparent 55%)
+            radial-gradient(ellipse 70% 55% at 50% 0%, rgba(88, 86, 214, 0.18) 0%, transparent 65%),
+            radial-gradient(ellipse 40% 30% at 80% 80%, rgba(52, 199, 89, 0.1) 0%, transparent 55%)
           `,
         }}
       />
 
-      {/* Subtle grid */}
+      {/* Grid Pattern */}
       <div
-        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none opacity-25"
         style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
           backgroundImage: `
             linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
@@ -109,53 +85,54 @@ export default function HeroCard() {
         }}
       />
 
-      {/* Floating chips */}
-      <Chip
-        animClass="animate-float-a"
+      {/* Floating Chips */}
+      <motion.div
+        className="absolute top-[18%] left-[6%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float"
         style={{
-          top: '18%', left: '5%',
-          background: 'rgba(88,86,214,0.18)',
-          border: '1px solid rgba(88,86,214,0.3)',
-          color: 'rgba(162,157,255,0.95)',
+          background: 'rgba(88, 86, 214, 0.2)',
+          border: '1px solid rgba(88, 86, 214, 0.3)',
+          color: 'rgba(162, 157, 255, 0.9)',
         }}
       >
         🎓 IEEE Affiliated
-      </Chip>
-      <Chip
-        animClass="animate-float-b"
+      </motion.div>
+
+      <motion.div
+        className="absolute top-[22%] right-[7%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float-slow"
         style={{
-          top: '20%', right: '6%',
-          background: 'rgba(52,199,89,0.13)',
-          border: '1px solid rgba(52,199,89,0.25)',
-          color: 'rgba(48,209,88,0.95)',
+          background: 'rgba(52, 199, 89, 0.15)',
+          border: '1px solid rgba(52, 199, 89, 0.25)',
+          color: 'rgba(48, 209, 88, 0.9)',
         }}
       >
         📍 Greater Noida
-      </Chip>
-      <Chip
-        animClass="animate-float-c"
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-[32%] left-[4%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float"
         style={{
-          bottom: '35%', left: '3%',
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          color: 'rgba(255,255,255,0.6)',
+          background: 'rgba(255, 255, 255, 0.06)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.6)',
+          animationDelay: '1.2s',
         }}
       >
         ⚡ 500+ Speakers
-      </Chip>
-      <Chip
-        animClass="animate-float-d"
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-[28%] right-[5%] text-[10px] font-[500] tracking-[0.04em] px-[11px] py-[5px] rounded-full backdrop-blur-[8px] pointer-events-none animate-float-slow"
         style={{
-          bottom: '30%', right: '4%',
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.1)',
-          color: 'rgba(255,255,255,0.6)',
+          background: 'rgba(255, 255, 255, 0.06)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.6)',
+          animationDelay: '2s',
         }}
       >
         🌍 40+ Countries
-      </Chip>
+      </motion.div>
 
-      {/* Text content */}
+      {/* Content */}
       <motion.div
         className="relative z-10 flex flex-col items-center"
         variants={containerVariants}
@@ -163,117 +140,113 @@ export default function HeroCard() {
         animate="visible"
       >
         {/* Eyebrow */}
-        <motion.div variants={itemVariants} className="flex items-center gap-2 mb-7">
-          <div
-            className="w-5 h-5 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(52,199,89,0.12)', border: '1px solid rgba(52,199,89,0.3)' }}
-          >
-            <div className="w-[7px] h-[7px] rounded-full animate-pulse-dot" style={{ background: '#34c759', boxShadow: '0 0 6px #34c759' }} />
-          </div>
-          <span className="eyebrow" style={{ color: 'rgba(162,157,255,0.85)', marginBottom: 0 }}>
-            NARI International Summit 2026
-          </span>
-        </motion.div>
+        <motion.p
+          variants={itemVariants}
+          className="text-eyebrow"
+          style={{
+            color: 'rgba(162, 157, 255, 0.8)',
+            marginBottom: '10px',
+          }}
+        >
+          NARI International Summit 2026
+        </motion.p>
 
         {/* Headline */}
         <motion.h1
           variants={itemVariants}
-          className="card-title text-center"
+          className="text-heading-1 text-center"
           style={{
-            fontSize: 'clamp(40px, 6vw, 72px)',
+            fontSize: 'clamp(38px, 5.5vw, 64px)',
             color: '#f5f5f7',
-            maxWidth: '780px',
+            maxWidth: '850px',
           }}
         >
-          Where{' '}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #a29dff, #7b78ff)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Research
-          </span>{' '}
-          meets{' '}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #34c759, #6dff9d)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Innovation.
-          </span>
+          Where <span className="text-acc-purple">Research</span><br />
+          meets <span className="text-acc-green">Innovation.</span>
         </motion.h1>
 
-        {/* Sub */}
+        {/* Subheading */}
         <motion.p
           variants={itemVariants}
-          className="card-body"
-          style={{ color: 'rgba(255,255,255,0.62)', marginTop: '16px' }}
+          className="font-[300] text-center mt-4"
+          style={{
+            color: 'rgba(255, 255, 255, 0.65)',
+            fontSize: '15px',
+            lineHeight: 1.55,
+            maxWidth: '460px',
+          }}
         >
-          India's premier academic summit for researchers, technologists, and innovators.{' '}
-          <span style={{ color: 'rgba(255,255,255,0.38)' }}>September 25–28 · Greater Noida.</span>
+          India's premier academic summit for researchers, technologists, and innovators. September 25–28, Greater Noida.
         </motion.p>
 
-        {/* CTAs */}
-        <motion.div variants={itemVariants} className="flex items-center gap-3 flex-wrap justify-center mb-8">
-          <Link
-            to="/events/nari-summit-2026/register"
-            className="pill-btn pill-btn-primary no-underline flex items-center gap-2"
+        {/* CTA Links (Thin, elegant underscores) */}
+        <motion.div
+          variants={itemVariants}
+          className="flex items-center gap-5 justify-center mt-5 mb-7"
+        >
+          <a
+            href="#register"
+            className="text-[14px] font-[400] text-[#2997ff] border-b border-[#2997ff]/40 pb-[1px] hover:opacity-70 transition-opacity"
           >
-            Register Now <ArrowRight size={14} />
-          </Link>
-          <Link
-            to="/editions"
-            className="pill-btn no-underline flex items-center gap-2"
-            style={{ background: 'rgba(255,255,255,0.09)', color: '#f5f5f7' }}
+            Register now →
+          </a>
+          <a
+            href="#explore"
+            className="text-[14px] font-[400] text-white/55 border-b border-white/20 pb-[1px] hover:opacity-70 transition-opacity"
           >
-            <Play size={13} fill="currentColor" /> Explore Editions
-          </Link>
+            Explore editions →
+          </a>
         </motion.div>
 
-        {/* Countdown */}
-        <motion.div variants={itemVariants} className="flex gap-2 mb-10">
-          <CdBox value={d} label="Days" />
-          <CdBox value={h} label="Hrs" />
-          <CdBox value={m} label="Min" />
-          <CdBox value={s} label="Sec" />
+        {/* Countdown (Clean layout spacing) */}
+        <motion.div
+          variants={itemVariants}
+          className="flex gap-[6px] mt-2 mb-11"
+        >
+          {[
+            { label: 'Days', value: countdown.days },
+            { label: 'Hrs', value: countdown.hours },
+            { label: 'Min', value: countdown.minutes },
+            { label: 'Sec', value: countdown.seconds },
+          ].map((item) => (
+            <div
+              key={item.label}
+              className="flex flex-col items-center min-w-[58px] px-4 py-3 rounded-xl text-center"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backdropFilter: 'blur(8px)',
+              }}
+            >
+              <span
+                className="font-display font-black text-[22px] leading-none tracking-[-0.02em]"
+                style={{ color: '#f5f5f7' }}
+              >
+                {String(item.value).padStart(2, '0')}
+              </span>
+              <span className="text-[9px] text-white/40 uppercase tracking-[0.07em] mt-[3px]">
+                {item.label}
+              </span>
+            </div>
+          ))}
         </motion.div>
       </motion.div>
 
-      {/* Bottom wordmark — fades into card bottom */}
+      {/* Bottom Wordmark */}
       <div
-        aria-hidden="true"
+        className="absolute bottom-0 left-0 right-0 text-center overflow-hidden pointer-events-none"
         style={{
-          width: '100%',
-          textAlign: 'center',
-          overflow: 'hidden',
-          marginTop: 'auto',
-          lineHeight: 0.85,
-          position: 'relative',
+          lineHeight: 0.9,
+          marginTop: '-10px',
         }}
       >
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0, left: 0, right: 0,
-            height: '100%',
-            background: 'linear-gradient(to top, #1d1d1f 20%, transparent)',
-            zIndex: 1,
-          }}
-        />
         <span
           className="font-display font-black select-none"
           style={{
-            fontSize: 'clamp(80px, 18vw, 200px)',
+            fontSize: 'clamp(80px, 14vw, 180px)',
             letterSpacing: '-0.06em',
-            color: 'rgba(255,255,255,0.03)',
+            color: 'rgba(255, 255, 255, 0.04)',
             display: 'block',
-            lineHeight: 0.9,
           }}
         >
           NARI 2026
