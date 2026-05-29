@@ -1,4 +1,4 @@
-import { Linkedin, Twitter, Instagram } from 'lucide-react'
+// import { Linkedin, Twitter, Instagram } from 'lucide-react'
 
 const FOOTER_COLUMNS = [
   {

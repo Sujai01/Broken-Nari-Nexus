@@ -1,0 +1,37 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite'; // Import the Tailwind Vite plugin
+import path from 'path';
+export default defineConfig({
+    plugins: [
+        react(),
+        tailwindcss(), // Add the Tailwind plugin here
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, './src'),
+        },
+    },
+    server: {
+        port: 5173,
+        strictPort: false,
+        open: true,
+    },
+    build: {
+        target: 'esnext',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'vendor': ['react', 'react-dom', 'react-router-dom'],
+                    'animation': ['framer-motion'],
+                    'ui': ['lucide-react'],
+                    'form': ['react-hook-form', '@hookform/resolvers', 'zod'],
+                },
+            },
+        },
+        reportCompressedSize: false,
+    },
+    define: {
+        '__VITE_BUILD__': true,
+    },
+});

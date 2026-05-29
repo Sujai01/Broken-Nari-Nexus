@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { User, AuthSession } from '@/types'
-import * as authApi from '@/lib/api/auth'
+import * as authApi from '@/api/auth'
 
 interface AuthStore {
     /* ─── STATE ─── */

@@ -170,7 +170,7 @@ export async function resetPassword(email: string): Promise<void> {
 /**
  * Update password with token from reset email
  */
-export async function updatePassword(token: string, newPassword: string): Promise<void> {
+export async function updatePassword(_token: string, newPassword: string): Promise<void> {
     try {
         const { error } = await supabase.auth.updateUser({
             password: newPassword,
