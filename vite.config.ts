@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite' // 1. Import the Tailwind Vite plugin
+import tailwindcss from '@tailwindcss/vite' // Import the Tailwind Vite plugin
 import path from 'path'
 
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(), // 2. Add the Tailwind plugin here
+    tailwindcss(), // Add the Tailwind plugin here
   ],
   resolve: {
     alias: {

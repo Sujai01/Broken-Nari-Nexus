@@ -16,7 +16,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
 
-  // Scroll-Spy: Automatically tracks which card is currently in view and highlights its nav link!
+  // Scroll-Spy: Tracks which card is currently in view and highlights its nav link!
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['home', 'events', 'speakers', 'about', 'register']
@@ -41,27 +41,43 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Constant Glassmorphism Header - Added 'relative' to make it the absolute center reference */}
+      {/* Constant Glassmorphism Header - Adjusted px-6 to px-3 to align exactly with your 12px card-grid padding */}
       <nav
-        className="sticky top-0 z-50 w-full h-[52px] flex items-center px-6 transition-all duration-200 bg-[rgba(245,245,247,0.82)] backdrop-blur-[20px] border-b border-black/8 relative"
+        className="sticky top-0 z-50 w-full h-[52px] flex items-center px-3 transition-all duration-200 bg-[rgba(245,245,247,0.82)] backdrop-blur-[20px] border-b border-black/8 relative"
       >
-        {/* Inner container handles Left Logo and Right CTA only */}
-        <div className="w-full max-w-[1200px] mx-auto flex items-center justify-between">
+        {/* Inner container with px-3 (12px) padding to match the card-grid's 12px padding exactly */}
+        <div
+          className="w-full max-w-[1200px] mx-auto px-3 flex items-center justify-between"
+          style={{ position: 'relative', height: '100%', width: '100%' }}
+        >
 
-          {/* Left Column: Logo */}
-          <div className="flex items-center justify-start z-10">
+          {/* Left Column: Logo (Surgically Adjustable) */}
+          <div
+            className="flex items-center justify-start z-10"
+            style={{
+              marginLeft: '24px' // <--- CHANGE THIS VALUE (e.g. '0px', '8px', '16px', '24px') TO SHIFT LOGO LEFT OR RIGHT
+            }}
+          >
             <a href="#home" className="flex items-center gap-2 no-underline shrink-0">
               <div className="w-[26px] h-[26px] rounded-[7px] bg-gradient-to-br from-[#5856d6] to-[#34c759] flex items-center justify-center flex-shrink-0">
                 <span className="font-display font-black text-white text-[12px] leading-none">N</span>
               </div>
-              <span className="font-display font-black text-[14px] text-[#1d1d1f] tracking-[-0.01em]">
+              <span
+                className="font-display font-black text-[14px] text-[#1d1d1f]"
+                style={{ letterSpacing: '-0.01em' }}
+              >
                 Nari<span className="text-[#5856d6]">nexus</span>
               </span>
             </a>
           </div>
 
-          {/* Right Column: CTA Button */}
-          <div className="hidden md:flex items-center justify-end z-10">
+          {/* Right Column: CTA Button (Surgically Adjustable) */}
+          <div
+            className="hidden md:flex items-center justify-end z-10"
+            style={{
+              marginRight: '-645px' // <--- CHANGE THIS VALUE (e.g. '12px', '24px', '32px') TO SHIFT BUTTON LEFT OR RIGHT
+            }}
+          >
             <a
               href="#register"
               style={{
@@ -73,11 +89,17 @@ export default function Navbar() {
                 padding: '7px 16px',
                 borderRadius: '20px',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.2s',
+                transition: 'all 0.2s ease',
                 textDecoration: 'none'
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#4845c2')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = '#5856d6')}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = '#4845c2';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1.02)'
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background = '#5856d6';
+                (e.currentTarget as HTMLAnchorElement).style.transform = 'scale(1)'
+              }}
             >
               Join Summit 2026
             </a>
@@ -95,7 +117,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Center Column: Navigation Menu (Now absolutely centered relative to 100% full screen width!) */}
+        {/* Center Column: Navigation Menu (Guaranteed dead-center horizontal positioning) */}
         <div
           className="hidden md:flex items-center z-0"
           style={{
