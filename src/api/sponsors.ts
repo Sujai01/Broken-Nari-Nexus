@@ -2,6 +2,20 @@ import { supabase } from '@/lib/supabase'
 import { Sponsor, EventSponsor, CreateSponsorInput, QueryOptions, PaginatedResponse } from '@/types'
 
 /* ─────────────────────────────────────────────────────
+   TYPES & SHAPES FOR INNER MAPPING
+   ───────────────────────────────────────────────────── */
+
+interface EventSponsorJoinRow {
+    sponsor: Sponsor
+    tier: string
+}
+
+interface EventSponsorAllRow extends EventSponsor {
+    sponsor: Sponsor
+    event_id: string
+}
+
+/* ─────────────────────────────────────────────────────
    SPONSORS SERVICE
    ───────────────────────────────────────────────────── */
 
@@ -95,10 +109,13 @@ export async function getEventSponsors(eventId: string): Promise<(Sponsor & { ti
         }
 
         return (
-            data?.map((item: any) => ({
-                ...item.sponsor,
-                tier: item.tier,
-            })) || []
+            data?.map((item: unknown) => {
+                const row = item as EventSponsorJoinRow
+                return {
+                    ...row.sponsor,
+                    tier: row.tier,
+                }
+            }) || []
         )
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to fetch event sponsors'
@@ -125,7 +142,11 @@ export async function getEventSponsorsByTier(
             throw new Error(error.message)
         }
 
-        return data?.map((item: any) => item.sponsor).filter(Boolean) || []
+        return (
+            data
+                ?.map((item: unknown) => (item as { sponsor: Sponsor }).sponsor)
+                .filter(Boolean) || []
+        )
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Failed to fetch sponsors'
         throw new Error(message)
@@ -164,9 +185,10 @@ export async function getSponsorCountByTier(
             associate: 0,
         }
 
-        data?.forEach((item: any) => {
-            if (item.tier in tierCounts) {
-                tierCounts[item.tier as keyof typeof tierCounts]++
+        data?.forEach((item: unknown) => {
+            const row = item as { tier: string }
+            if (row.tier in tierCounts) {
+                tierCounts[row.tier as keyof typeof tierCounts]++
             }
         })
 
@@ -341,29 +363,32 @@ export async function searchSponsors(query: string): Promise<Sponsor[]> {
 /**
  * Get all sponsors for all events (admin dashboard)
  */
-export async function getAllEventSponsors(): Promise
-(EventSponsor & { sponsor: Sponsor; event_id: string })[]
-    > {
+export async function getAllEventSponsors(): Promise<
+    (EventSponsor & { sponsor: Sponsor; event_id: string })[]
+> {
     try {
         const { data, error } = await supabase
             .from('event_sponsors')
             .select('*, sponsor:sponsors(*)')
             .order('tier', { ascending: true })
 
-    if(error) {
+        if (error) {
             throw new Error(error.message)
         }
 
-    return(
-            data?.map((item: any) => ({
-                ...item,
-                sponsor: item.sponsor,
-            })) || []
-    )
-} catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to fetch sponsors'
-    throw new Error(message)
-}
+        return (
+            data?.map((item: unknown) => {
+                const row = item as EventSponsorAllRow
+                return {
+                    ...row,
+                    sponsor: row.sponsor,
+                }
+            }) || []
+        )
+    } catch (error) {
+        const message = error instanceof Error ? error.message : 'Failed to fetch sponsors'
+        throw new Error(message)
+    }
 }
 
 /**
