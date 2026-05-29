@@ -18,7 +18,7 @@ export default function AwardCard() {
         alignItems: 'flex-start',
         textAlign: 'left',
         padding: '44px 32px 0',
-        minHeight: '500px', // Symmetrically matches the IEEECard next to it
+        minHeight: '503px', // Symmetrically matches the IEEECard next to it
       }}
       initial="hidden"
       whileInView="visible"

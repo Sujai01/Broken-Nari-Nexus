@@ -17,7 +17,8 @@ export default function ScheduleCard() {
         alignItems: 'flex-start',
         textAlign: 'left',
         padding: '44px 32px 44px',
-        minHeight: '360px',
+        minHeight: '380px', // Increased and standardized
+        height: '100%',      // Forces full vertical grid stretch
       }}
       initial="hidden"
       whileInView="visible"

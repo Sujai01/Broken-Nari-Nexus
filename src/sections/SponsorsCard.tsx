@@ -19,7 +19,8 @@ export default function SponsorsCard() {
         alignItems: 'flex-start',
         textAlign: 'left',
         padding: '44px 32px 44px',
-        minHeight: '360px',
+        minHeight: '380px', // Increased and standardized
+        height: '100%',      // Forces full vertical grid stretch
         justifyContent: 'space-between',
       }}
       initial="hidden"

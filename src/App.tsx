@@ -10,7 +10,6 @@ import AwardCard from '@/sections/AwardCard'
 import ExpoCard from '@/sections/ExpoCard'
 import ScheduleCard from '@/sections/ScheduleCard'
 import SponsorsCard from '@/sections/SponsorsCard'
-import NewsletterSection from '@/sections/NewsletterSection'
 
 export default function App() {
   return (
@@ -18,7 +17,7 @@ export default function App() {
       {/* Sticky Header */}
       <Navbar />
 
-      {/* Main Content Area - Consolidated Single Page Grid */}
+      {/* Main Content Area - Bounded Single Page Grid */}
       <main className="flex-grow pt-[52px]">
         <motion.div
           className="card-grid"
@@ -65,9 +64,6 @@ export default function App() {
             <SponsorsCard />
           </div>
         </motion.div>
-
-        {/* Newsletter Section */}
-        <NewsletterSection />
       </main>
 
       {/* Footer */}
