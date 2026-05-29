@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 interface Speaker {
   id: string
@@ -91,6 +90,7 @@ export default function SpeakersCard() {
         alignItems: 'flex-start',
         textAlign: 'left',
         padding: '44px 32px 0',
+        minHeight: '500px',
       }}
       initial="hidden"
       whileInView="visible"
@@ -106,9 +106,9 @@ export default function SpeakersCard() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col h-full w-full">
+      <div className="relative z-10 flex flex-col h-full w-full justify-between">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <p
             className="text-eyebrow"
             style={{ color: 'rgba(162,157,255,0.75)', marginBottom: 0 }}
@@ -119,56 +119,56 @@ export default function SpeakersCard() {
           <h2
             className="text-heading-3"
             style={{
-              fontSize: 'clamp(28px, 3vw, 44px)',
+              fontSize: 'clamp(28px, 3vw, 42px)',
               color: '#f5f5f7',
               maxWidth: '320px',
               marginTop: '10px',
               marginBottom: '10px',
+              lineHeight: 1.1,
             }}
           >
-            Voices that{' '}
-            <span className="gradient-purple-text">define</span>{' '}
+            Voices that<br />
+            <span className="gradient-purple-text">define</span><br />
             the future.
           </h2>
 
           <p
             style={{
+              textAlign: 'left',
               color: 'rgba(255,255,255,0.55)',
               maxWidth: '300px',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 300,
-              lineHeight: 1.58,
+              lineHeight: 1.5,
               marginBottom: '16px',
             }}
           >
             Keynotes from IIT, BITS, IISc, Google DeepMind, and global research institutions.
           </p>
 
-          <Link
-            to="/speakers"
-            className="inline-flex items-center gap-1 text-[14px] font-[400] no-underline border-b border-current"
+          <a
+            href="#speakers"
+            className="inline-flex items-center gap-1 text-[13px] font-[400] no-underline border-b border-current"
             style={{
               color: 'rgba(162,157,255,0.9)',
               borderColor: 'rgba(162,157,255,0.35)',
               transition: 'opacity 0.15s',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
           >
             Meet all speakers <ArrowRight size={12} />
-          </Link>
+          </a>
         </div>
 
         {/* Speaker Portraits Row */}
         <div
-          className="relative w-full flex-1 flex items-end overflow-hidden"
-          style={{ paddingBottom: 0 }}
+          className="relative w-full flex-grow flex items-end overflow-hidden mt-2"
+          style={{ minHeight: '190px', paddingBottom: '8px' }}
         >
           <div className="flex gap-3 w-full px-1 pb-0 items-end">
             {FEATURED_SPEAKERS.map((speaker, index) => (
               <div
                 key={speaker.id}
-                className="flex-1 rounded-2xl relative overflow-hidden flex flex-col justify-end p-[10px]"
+                className="flex-1 rounded-2xl relative overflow-hidden flex flex-col justify-end p-2 pb-3" // Tighter padding, lifted bottom padding
                 style={{
                   minHeight: '180px',
                   background: speaker.portraitBg,
@@ -201,29 +201,35 @@ export default function SpeakersCard() {
                   {speaker.initials}
                 </span>
 
-                {/* Speaker Info */}
-                <p
-                  className="relative z-10 text-[11px] font-[500] text-[#f5f5f7] leading-[1.3]"
-                  style={{ marginBottom: 0 }}
-                >
-                  {speaker.name}
-                </p>
-                <p
-                  className="relative z-10 text-[10px] text-white/45 mb-[6px]"
-                  style={{ marginTop: '2px' }}
-                >
-                  {speaker.role}
-                </p>
-                <span
-                  className="relative z-10 self-start text-[9px] font-[500] px-[7px] py-[2px] rounded-[5px] uppercase tracking-[0.04em]"
-                  style={{
-                    background: badgeStyles[speaker.badgeColor].bg,
-                    border: badgeStyles[speaker.badgeColor].border,
-                    color: badgeStyles[speaker.badgeColor].color,
-                  }}
-                >
-                  {speaker.badge}
-                </span>
+                {/* Speaker Info Container (Ultra-Compact Fonts & Generous padding-bottom lift) */}
+                <div className="relative z-10 flex flex-col justify-end h-full">
+                  <p
+                    className="text-[9px] font-[600] text-[#f5f5f7] leading-tight" // Scaled to 9px
+                    style={{ marginBottom: '10px', marginLeft: '5px' }}
+                  >
+                    {speaker.name}
+                  </p>
+                  <p
+                    className="text-[8px] text-white/50 leading-none" // Scaled to 8px
+                    style={{ marginBottom: '15px', marginLeft: '5px' }}
+                  >
+                    {speaker.role}
+                  </p>
+                  <span
+                    className="self-start text-[7px] font-[600] px-[6px] py-[2px] rounded-[4px] uppercase tracking-[0.04em]" // Scaled to 7px
+                    style={{
+                      background: badgeStyles[speaker.badgeColor].bg,
+                      border: badgeStyles[speaker.badgeColor].border,
+                      color: badgeStyles[speaker.badgeColor].color,
+                      lineHeight: 1,
+                      display: 'inline-block',
+                      marginBottom: '10px',
+                      marginLeft: '10px'
+                    }}
+                  >
+                    {speaker.badge}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

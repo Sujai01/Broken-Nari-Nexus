@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Award, CheckCircle2 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 export default function IEEECard() {
   const fadeInVariants = {
@@ -11,22 +11,14 @@ export default function IEEECard() {
     },
   }
 
-  const badgeVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 },
-    },
-  }
-
   return (
     <motion.div
       className="card card-grid-half card-lavender relative overflow-hidden"
       style={{
-        alignItems: 'center',
-        textAlign: 'center',
+        alignItems: 'flex-start',
+        textAlign: 'left',
         padding: '44px 32px 0',
+        minHeight: '500px', // Symmetrically matches the AwardCard next to it
       }}
       initial="hidden"
       whileInView="visible"
@@ -42,113 +34,74 @@ export default function IEEECard() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center h-full justify-between">
-        {/* Top Section */}
-        <div className="flex flex-col items-center">
-          <p
-            className="text-eyebrow"
-            style={{ color: 'rgba(88,86,214,0.65)' }}
-          >
-            Academic Recognition
+      <div className="relative z-10 flex flex-col h-full w-full justify-between">
+        {/* Top Text Sections */}
+        <div>
+          <p className="text-eyebrow" style={{ color: 'rgba(88,86,214,0.65)', margin: 0 }}>
+            IEEE Affiliated
           </p>
 
           <h2
             className="text-heading-3"
             style={{
               fontSize: 'clamp(26px, 3vw, 40px)',
-              color: '#1d1d1f',
+              color: '#1c1243',
               marginTop: '10px',
               marginBottom: '10px',
-              maxWidth: '280px',
+              lineHeight: 1.1,
             }}
           >
-            Indexed & <span style={{ color: '#5856d6' }}>Peer Reviewed</span>
+            Academic<br />
+            <span style={{ color: '#5856d6' }}>credibility,</span><br />
+            globally.
           </h2>
 
           <p
             style={{
-              color: 'rgba(0,0,0,0.55)',
+              textAlign: 'left',
+              color: 'rgba(28,18,67,0.65)',
+              maxWidth: '300px',
               fontSize: '14px',
               fontWeight: 300,
-              lineHeight: 1.58,
-              maxWidth: '260px',
+              lineHeight: 1.55,
               marginBottom: '20px',
             }}
           >
-            Papers published in IEEE Xplore, ACM Digital Library, and Springer proceedings.
+            NARI's events carry IEEE and Springer recognition. Your participation means something internationally.
           </p>
+
+          <a
+            href="#about"
+            className="inline-flex items-center gap-1 text-[13px] font-[400] no-underline border-b border-current"
+            style={{
+              color: '#5856d6',
+              borderColor: 'rgba(88,86,214,0.35)',
+              transition: 'opacity 0.15s',
+            }}
+          >
+            Learn about accreditation <ArrowRight size={12} />
+          </a>
         </div>
 
-        {/* IEEE Badge */}
-        <motion.div
-          className="relative mb-8"
-          variants={badgeVariants}
-        >
+        {/* Centered IEEE Badge (Matches Mockup bottom-center alignment) */}
+        <div className="relative w-full flex-grow flex items-center justify-center mt-4" style={{ minHeight: '180px' }}>
           <div
             style={{
-              width: '140px',
-              height: '140px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(88,86,214,0.1), rgba(88,86,214,0.05))',
-              border: '2px solid rgba(88,86,214,0.25)',
+              width: '130px',
+              height: '130px',
+              borderRadius: '28px',
+              background: 'linear-gradient(135deg, rgba(88,86,214,0.15), rgba(88,86,214,0.06))',
+              border: '1px solid rgba(88,86,214,0.2)',
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              position: 'relative',
               boxShadow: '0 8px 32px rgba(88,86,214,0.15)',
             }}
           >
-            <Award
-              size={52}
-              style={{
-                color: '#5856d6',
-              }}
-            />
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '32px', color: '#5856d6', letterSpacing: '-0.02em', lineHeight: 1 }}>IEEE</div>
+            <div style={{ fontSize: '10px', color: 'rgba(88,86,214,0.5)', letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: '4px', fontWeight: 600 }}>AFFILIATED</div>
           </div>
-        </motion.div>
-
-        {/* Recognition Items */}
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px',
-          }}
-        >
-          {[
-            { text: 'IEEE Xplore Indexed' },
-            { text: 'ACM Digital Library' },
-            { text: 'Springer Proceedings' },
-          ].map((item, index) => (
-            <motion.div
-              key={index}
-              className="flex items-center gap-3 px-4 py-3 rounded-lg"
-              style={{
-                background: 'rgba(88,86,214,0.08)',
-                border: '1px solid rgba(88,86,214,0.15)',
-                animation: `fade-in 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${0.3 + index * 0.1}s both`,
-              }}
-            >
-              <CheckCircle2
-                size={16}
-                style={{
-                  color: '#5856d6',
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  color: '#1d1d1f',
-                  fontSize: '13px',
-                  fontWeight: 500,
-                  margin: 0,
-                }}
-              >
-                {item.text}
-              </span>
-            </motion.div>
-          ))}
         </div>
       </div>
     </motion.div>

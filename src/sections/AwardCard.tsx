@@ -1,17 +1,5 @@
 import { motion } from 'framer-motion'
-import { Star, Trophy } from 'lucide-react'
-import { Link } from 'react-router-dom'
-
-interface AwardWinner {
-  year: string
-  count: number
-}
-
-const AWARD_HISTORY: AwardWinner[] = [
-  { year: '2023', count: 12 },
-  { year: '2024', count: 18 },
-  { year: '2025', count: 22 },
-]
+import { ArrowRight } from 'lucide-react'
 
 export default function AwardCard() {
   const fadeInVariants = {
@@ -23,23 +11,14 @@ export default function AwardCard() {
     },
   }
 
-  const trophyVariants = {
-    hidden: { opacity: 0, scale: 0.8, y: 20 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.15 },
-    },
-  }
-
   return (
     <motion.div
       className="card card-grid-half card-rose relative overflow-hidden"
       style={{
-        alignItems: 'center',
-        textAlign: 'center',
+        alignItems: 'flex-start',
+        textAlign: 'left',
         padding: '44px 32px 0',
+        minHeight: '500px', // Symmetrically matches the IEEECard next to it
       }}
       initial="hidden"
       whileInView="visible"
@@ -55,14 +34,11 @@ export default function AwardCard() {
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center h-full justify-between w-full">
-        {/* Top Section */}
-        <div className="flex flex-col items-center">
-          <p
-            className="text-eyebrow"
-            style={{ color: 'rgba(255,107,157,0.7)' }}
-          >
-            Women in STEM
+      <div className="relative z-10 flex flex-col h-full w-full justify-between">
+        {/* Top Text Sections */}
+        <div>
+          <p className="text-eyebrow" style={{ color: 'rgba(255,107,157,0.7)', margin: 0 }}>
+            Best Women in STEM
           </p>
 
           <h2
@@ -72,152 +48,56 @@ export default function AwardCard() {
               color: '#f5f5f7',
               marginTop: '10px',
               marginBottom: '10px',
-              maxWidth: '280px',
+              lineHeight: 1.1,
             }}
           >
-            Best Women in <span style={{ color: '#ff6b9d' }}>Research</span>
+            Celebrating<br />
+            <span className="gradient-rose-text" style={{ background: 'linear-gradient(135deg, #ff6b9d, #ff8da1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>women</span><br />
+            who lead.
           </h2>
 
           <p
             style={{
+              textAlign: 'left',
               color: 'rgba(255,255,255,0.55)',
+              maxWidth: '300px',
               fontSize: '14px',
               fontWeight: 300,
-              lineHeight: 1.58,
-              maxWidth: '260px',
+              lineHeight: 1.55,
               marginBottom: '20px',
             }}
           >
-            Celebrating exceptional female researchers and innovators in STEM.
+            Recognising outstanding women researchers and innovators. Nominate a trailblazer for the 2026 award.
           </p>
-        </div>
 
-        {/* Trophy Visual */}
-        <motion.div
-          className="relative mb-8"
-          variants={trophyVariants}
-        >
-          <div
-            style={{
-              position: 'relative',
-              width: '100px',
-              height: '100px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {/* Trophy Container */}
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Trophy
-                size={60}
-                style={{
-                  color: '#ff6b9d',
-                  filter: 'drop-shadow(0 8px 20px rgba(255, 107, 157, 0.25))',
-                }}
-              />
-
-              {/* Star Accent */}
-              <Star
-                size={24}
-                style={{
-                  color: '#ff6b9d',
-                  position: 'absolute',
-                  top: '-8px',
-                  right: '-8px',
-                  fill: 'currentColor',
-                  animation: 'pulse 2.4s ease-in-out infinite',
-                }}
-              />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Award Stats */}
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-          }}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '8px',
-            }}
-          >
-            {AWARD_HISTORY.map((award, index) => (
-              <motion.div
-                key={award.year}
-                className="rounded-lg px-3 py-4"
-                style={{
-                  background: 'rgba(255,107,157,0.12)',
-                  border: '1px solid rgba(255,107,157,0.2)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '4px',
-                }}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.45,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  delay: 0.3 + index * 0.1,
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 800,
-                    fontSize: '18px',
-                    color: '#ff6b9d',
-                    lineHeight: 1,
-                  }}
-                >
-                  {award.count}
-                </span>
-                <span
-                  style={{
-                    fontSize: '10px',
-                    color: 'rgba(255,255,255,0.55)',
-                    fontWeight: 500,
-                    letterSpacing: '0.04em',
-                  }}
-                >
-                  {award.year}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Learn More Link */}
-          <Link
-            to="/about"
-            className="inline-block mt-2 text-[13px] font-[400] no-underline border-b border-current"
+          <a
+            href="#register"
+            className="inline-flex items-center gap-1 text-[13px] font-[400] no-underline border-b border-current"
             style={{
               color: 'rgba(255,107,157,0.9)',
               borderColor: 'rgba(255,107,157,0.35)',
               transition: 'opacity 0.15s',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.6')}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.9')}
           >
-            View award recipients →
-          </Link>
+            Nominate now <ArrowRight size={12} />
+          </a>
+        </div>
+
+        {/* Floating Golden Trophy (Matches Mockup bottom-right alignment) */}
+        <div
+          className="relative w-full flex-grow flex items-end justify-end mt-4 animate-float"
+          style={{ minHeight: '140px', paddingRight: '12px', paddingBottom: '20px' }}
+        >
+          <span
+            style={{
+              fontSize: '76px',
+              lineHeight: 1,
+              display: 'inline-block',
+              filter: 'drop-shadow(0 12px 28px rgba(245,194,66,0.35))'
+            }}
+          >
+            🏆
+          </span>
         </div>
       </div>
     </motion.div>

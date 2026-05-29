@@ -1,57 +1,71 @@
 import { motion } from 'framer-motion'
 import { Zap, Cpu, Microscope, Wifi, Lightbulb, Shield } from 'lucide-react'
-import { Link } from 'react-router-dom'
 
 interface ExpoCategory {
   id: string
   icon: React.ReactNode
   title: string
   description: string
-  color: string
+  accentColor: string      // Mapped to mockup color tokens
+  glowBg: string           // Frosty translucent hover glow
+  borderColor: string      // Mapped high-contrast border
 }
 
+// 6 Interactive Zones - Custom Color Themes mapped exactly to your design palette
 const EXPO_CATEGORIES: ExpoCategory[] = [
   {
     id: '1',
-    icon: <Cpu size={28} />,
+    icon: <Cpu size={24} />,
     title: 'AI & ML',
     description: 'Artificial Intelligence and Machine Learning innovations',
-    color: 'from-purple-400 to-purple-600',
+    accentColor: '#a29dff', // Purple
+    glowBg: 'rgba(162, 157, 255, 0.15)',
+    borderColor: 'rgba(162, 157, 255, 0.25)'
   },
   {
     id: '2',
-    icon: <Microscope size={28} />,
+    icon: <Microscope size={24} />,
     title: 'Biotech',
     description: 'Biotechnology and life sciences research',
-    color: 'from-green-400 to-green-600',
+    accentColor: '#34c759', // Green
+    glowBg: 'rgba(52, 199, 89, 0.12)',
+    borderColor: 'rgba(52, 199, 89, 0.22)'
   },
   {
     id: '3',
-    icon: <Wifi size={28} />,
+    icon: <Wifi size={24} />,
     title: '5G & IoT',
     description: 'Next-gen connectivity and smart devices',
-    color: 'from-blue-400 to-blue-600',
+    accentColor: '#4eb8ff', // Blue
+    glowBg: 'rgba(78, 184, 255, 0.12)',
+    borderColor: 'rgba(78, 184, 255, 0.22)'
   },
   {
     id: '4',
-    icon: <Lightbulb size={28} />,
+    icon: <Lightbulb size={24} />,
     title: 'Climate Tech',
     description: 'Sustainable and green technology solutions',
-    color: 'from-emerald-400 to-emerald-600',
+    accentColor: '#34c759', // Emerald
+    glowBg: 'rgba(52, 199, 89, 0.12)',
+    borderColor: 'rgba(52, 199, 89, 0.22)'
   },
   {
     id: '5',
-    icon: <Shield size={28} />,
+    icon: <Shield size={24} />,
     title: 'Cybersecurity',
     description: 'Information security and threat protection',
-    color: 'from-red-400 to-red-600',
+    accentColor: '#ff6b9d', // Rose/Red
+    glowBg: 'rgba(255, 107, 157, 0.12)',
+    borderColor: 'rgba(255, 107, 157, 0.22)'
   },
   {
     id: '6',
-    icon: <Zap size={28} />,
+    icon: <Zap size={24} />,
     title: 'Quantum',
     description: 'Quantum computing and quantum technologies',
-    color: 'from-indigo-400 to-indigo-600',
+    accentColor: '#bf94ff', // Indigo
+    glowBg: 'rgba(191, 148, 255, 0.12)',
+    borderColor: 'rgba(191, 148, 255, 0.22)'
   },
 ]
 
@@ -89,7 +103,7 @@ export default function ExpoCard() {
       className="card card-grid-full card-slate relative overflow-hidden"
       style={{
         minHeight: '480px',
-        padding: '52px 40px 40px',
+        padding: '52px 40px 52px',
       }}
       initial="hidden"
       whileInView="visible"
@@ -139,9 +153,11 @@ export default function ExpoCard() {
               marginTop: '10px',
               marginBottom: '10px',
               maxWidth: '700px',
+              lineHeight: 1.1,
             }}
           >
-            Explore Tomorrow's <span className="gradient-green-text">Technology</span>
+            Explore<br />
+            <span className="gradient-green-text">Tomorrow's Technology.</span>
           </h2>
 
           <p
@@ -152,6 +168,7 @@ export default function ExpoCard() {
               lineHeight: 1.58,
               maxWidth: '560px',
               margin: '0 auto',
+              marginBottom: '15px'
             }}
           >
             Six interactive zones showcasing cutting-edge research and innovation across AI, biotech, quantum, and more.
@@ -169,34 +186,39 @@ export default function ExpoCard() {
           {EXPO_CATEGORIES.map((category) => (
             <motion.div
               key={category.id}
-              className="group rounded-2xl p-6 relative overflow-hidden cursor-pointer transition-all duration-300 hover:scale-105"
+              className="group rounded-2xl p-6 relative overflow-hidden cursor-pointer transition-all duration-300"
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(10px)',
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
               }}
               variants={itemVariants}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.04,
+                borderColor: category.borderColor,
+                boxShadow: `0 8px 32px ${category.glowBg}`
+              }}
             >
-              {/* Hover Gradient */}
+              {/* Individual Color Theme Hover Gradient Overlay */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-40 transition-opacity duration-300"
+                className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none"
                 style={{
-                  background: `linear-gradient(135deg, rgba(78,184,255,0.15), rgba(52,199,89,0.1))`,
+                  background: `linear-gradient(135deg, ${category.accentColor}, transparent)`,
                 }}
               />
 
-              {/* Icon Container */}
+              {/* Icon Container (Translucent and color-matched) */}
               <div
                 className="relative z-10 mb-4 inline-flex p-3 rounded-xl transition-all duration-300"
                 style={{
-                  background: 'rgba(255,255,255,0.08)',
-                  border: '1px solid rgba(255,255,255,0.15)',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  color: category.accentColor, // Colored icon
+                  marginBottom: '10px'
                 }}
               >
-                <div style={{ color: '#4eb8ff' }}>
-                  {category.icon}
-                </div>
+                {category.icon}
               </div>
 
               {/* Category Title */}
@@ -206,6 +228,7 @@ export default function ExpoCard() {
                   fontSize: '16px',
                   color: '#f5f5f7',
                   lineHeight: 1.2,
+                  marginBottom: '10px'
                 }}
               >
                 {category.title}
@@ -217,18 +240,19 @@ export default function ExpoCard() {
                 style={{
                   color: 'rgba(255,255,255,0.5)',
                   lineHeight: 1.5,
-                  marginBottom: 0,
+                  marginBottom: '8px'
                 }}
               >
                 {category.description}
               </p>
 
-              {/* Arrow Indicator */}
+              {/* Arrow Indicator (Color-matched) */}
               <div
-                className="relative z-10 mt-4 inline-flex opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="relative z-10 mt-4 inline-flex opacity-0 group-hover:opacity-100 transition-all duration-300"
                 style={{
                   fontSize: '14px',
-                  color: 'rgba(78,184,255,0.8)',
+                  color: category.accentColor,
+                  marginBottom: '10px'
                 }}
               >
                 →
@@ -237,14 +261,16 @@ export default function ExpoCard() {
           ))}
         </motion.div>
 
-        {/* CTA Button */}
-        <Link
-          to="/events"
+        {/* CTA Button (Clean, in-page scroll anchor matching schedule card) */}
+        <a
+          href="#events"
           className="mt-10 inline-flex items-center gap-2 px-8 py-3 rounded-full font-[500] text-[14px] no-underline transition-all duration-200"
           style={{
             background: 'rgba(78,184,255,0.15)',
             border: '1px solid rgba(78,184,255,0.3)',
             color: '#4eb8ff',
+            marginTop: '20px',
+            fontSize: '14px'
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(78,184,255,0.25)'
@@ -256,7 +282,7 @@ export default function ExpoCard() {
           }}
         >
           View Expo Schedule →
-        </Link>
+        </a>
       </div>
     </motion.div>
   )
