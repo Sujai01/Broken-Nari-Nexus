@@ -1,4 +1,4 @@
-// import { Linkedin, Twitter, Instagram } from 'lucide-react'
+import { Linkedin, Twitter, Instagram } from 'lucide-react'
 
 const FOOTER_COLUMNS = [
   {
@@ -43,14 +43,31 @@ const FOOTER_COLUMNS = [
   },
 ]
 
+const SOCIAL_LINKS = [
+  {
+    icon: <Linkedin size={14} />,
+    label: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/nari-nexus-533b26413?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app'
+  },
+  {
+    icon: <Twitter size={14} />,
+    label: 'Twitter',
+    url: 'https://x.com/narinexuss?s=11'
+  },
+  {
+    icon: <Instagram size={14} />,
+    label: 'Instagram',
+    url: 'https://www.instagram.com/narinexus.co?igsh=eHcyNmp0cTBzeDJy&utm_source=qr'
+  },
+]
+
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    // Added 'flex justify-center w-full' to force absolute horizontal centering of the footer contents
     <footer className="bg-[#f5f5f7] border-t border-black/8 pt-10 pb-5 px-6 flex justify-center w-full">
 
-      {/* Centered bounded container (Guaranteed dead-center horizontal positioning) */}
+      {/* Centered bounded container */}
       <div
         style={{
           width: '100%',
@@ -62,17 +79,9 @@ export default function Footer() {
       >
 
         {/* Footer Content Grid - 4 Columns */}
-        <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-x-12"
-          style={{
-            paddingBottom: '32px',
-            borderBottom: '1px solid rgba(0,0,0,0.08)',
-            marginBottom: '20px',
-          }}
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-x-12 pb-6">
           {FOOTER_COLUMNS.map((column) => (
             <div key={column.title}>
-              {/* Header uses standard Inter font, 11px, semi-bold, non-caps */}
               <h3
                 className="font-sans mb-3 text-[11px]"
                 style={{
@@ -85,7 +94,6 @@ export default function Footer() {
                 {column.title}
               </h3>
 
-              {/* Tight, compact vertical list gap (6px) */}
               <ul className="flex flex-col gap-[6px] list-none m-0 p-0">
                 {column.links.map((link, idx) => (
                   <li key={idx}>
@@ -102,11 +110,50 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Bottom Bar (pt-4 to sit compact and clean below the divider) */}
+        {/* Social Icons Row - Placed directly above the divider line (aligned with Platform column) */}
+        <div
+          className="flex gap-2 pb-6"
+          style={{
+            position: 'relative',
+            // borderBottom: '1px solid rgba(0,0,0,0.08)',
+            marginBottom: '30px',
+            marginTop: '30px',
+            marginLeft: '538px'
+          }}
+        >
+          {SOCIAL_LINKS.map((social) => (
+            <a
+              key={social.label}
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[28px] h-[28px] rounded-md border border-black/8 text-[#1d1d1f]/40 flex items-center justify-center no-underline transition-all duration-150"
+              style={{ background: 'transparent' }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = '#5856d6'
+                e.currentTarget.style.borderColor = 'rgba(88,86,214,0.3)'
+                e.currentTarget.style.background = 'rgba(0,0,0,0.04)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = 'rgba(29,29,31,0.4)'
+                e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'
+                e.currentTarget.style.background = 'transparent'
+              }}
+              aria-label={social.label}
+            >
+              {social.icon}
+            </a>
+          ))}
+        </div>
+
+        {/* Bottom Bar - Clean copyright and legal links */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-4 mb-12">
+          {/* Left Copyright */}
           <p className="text-[11.5px] text-[#1d1d1f]/40 font-[300] m-0">
             Copyright © {currentYear} NARI. All rights reserved. · A-11 Knowledge Park 3rd, Greater Noida UP 201310
           </p>
+
+          {/* Right Legal Links */}
           <div className="flex gap-4 flex-wrap">
             <a
               href="#privacy"
